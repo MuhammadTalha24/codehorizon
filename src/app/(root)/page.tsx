@@ -1,7 +1,7 @@
 import React from "react";
-import OutputPanel from "./__components/OutputPanel";
-import EditorPanel from "./__components/EditorPanel";
-import Header from "./__components/Header";
+import OutputPanel from "./_components/OutputPanel";
+import EditorPanel from "./_components/EditorPanel";
+import Header from "./_components/Header";
 
 export default function Home() {
   return (
