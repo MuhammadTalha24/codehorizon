@@ -23,8 +23,8 @@ function RunButton() {
       await saveExecution({
         language,
         code: result.code,
-        output: result.output || undefined,
-        error: result.error || undefined,
+        output: result.output ?? "",
+        error: result.error ?? "",
       });
     }
   };

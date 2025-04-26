@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import ConvexClientProvider from "@/components/providers/ConvexClientProvider";
 import Footer from "@/components/Footer";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,8 +18,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Code Craft",
-  description: "Share and run code snippets",
+  title: "Code Horizon - The Ultimate Online Code Editor and Playground",
+  description:
+    "An online code editor to write, run, and share your code effortlessly across multiple languages.",
 };
 
 export default function RootLayout({
@@ -35,6 +37,7 @@ export default function RootLayout({
           <ConvexClientProvider>{children}</ConvexClientProvider>
 
           <Footer />
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
