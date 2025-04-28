@@ -22,7 +22,7 @@ function ShareSnippetDialog({ onClose }: { onClose: () => void }) {
       toast.success("Snippet shared successfully!");
     } catch (error) {
       console.error("Error sharing snippet:", error);
-      toast.error("Failed to share snippet");
+      toast.error("Login First To Share Snippet!");
     } finally {
       setIsSharing(false);
     }
