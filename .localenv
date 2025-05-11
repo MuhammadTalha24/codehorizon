@@ -1,0 +1,9 @@
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_Y29tcG9zZWQtbXVsZS01OS5jbGVyay5hY2NvdW50cy5kZXYk
+
+CLERK_SECRET_KEY=sk_test_QBpttE4J28JCdp9FU8j16A0qNI7NoDGnQr81hwIgV0
+
+# Deployment used by `npx convex dev`
+CONVEX_DEPLOYMENT=dev:dependable-porpoise-138 # team: muhammad-talha-6c91b, project: code-horizon-970c0
+
+NEXT_PUBLIC_CONVEX_URL=https://dependable-porpoise-138.convex.cloud
+CLERK_WEBHOOK_SECRET=whsec_Uc3tfGaY9kf4BmY/01TXfUmNO39mOpS6
