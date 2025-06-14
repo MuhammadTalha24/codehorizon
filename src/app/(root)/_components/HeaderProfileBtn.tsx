@@ -16,7 +16,15 @@ function HeaderProfileBtn() {
         </UserButton.MenuItems>
       </UserButton>
       <SignedOut>
-        <SignInButton />
+       <SignInButton mode="modal">
+          <button
+            type="button"
+            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg cursor-pointer hover:bg-blue-700 transition duration-300"
+          >
+            Sign In
+          </button>
+        </SignInButton>
+
       </SignedOut>
     </>
   );
