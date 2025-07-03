@@ -1,4 +1,5 @@
 import HeaderProfileBtn from "@/app/(root)/_components/HeaderProfileBtn";
+import NotificationBell from "@/app/(root)/_components/NotificationBell";
 import { SignedOut } from "@clerk/nextjs";
 import { Blocks, Code2, Sparkles } from "lucide-react";
 import Link from "next/link";
@@ -71,6 +72,7 @@ function NavigationHeader() {
             </SignedOut>
 
             {/* profile button */}
+            <NotificationBell />
             <HeaderProfileBtn />
           </div>
         </div>

@@ -8,6 +8,8 @@ import ThemeSelector from "./ThemeSelector";
 import LanguageSelector from "./LanguageSelector";
 import RunButton from "./RunButton";
 import HeaderProfileBtn from "./HeaderProfileBtn";
+import NotificationBell from "./NotificationBell";
+// import NotificationListener from "./NotificationListener";
 
 async function Header() {
   const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
@@ -96,8 +98,10 @@ async function Header() {
             <RunButton />
           </SignedIn>
 
-          <div className="pl-3 border-l border-gray-800">
+          <div className="pl-3 border-l border-gray-800 flex items-center gap-4">
+            <NotificationBell />
             <HeaderProfileBtn />
+          
           </div>
         </div>
       </div>

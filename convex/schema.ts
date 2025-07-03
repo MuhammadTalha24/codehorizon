@@ -12,6 +12,19 @@ export default defineSchema({
     lemonSqueezyOrderId: v.optional(v.string()),
   }).index("by_user_id", ["userId"]),
 
+
+  notifications: defineTable({
+  recipientUserId: v.string(), // snippet owner
+  senderUserId: v.string(),    // actor
+  senderName: v.string(),
+  snippetId: v.id("snippets"),
+  snippetTitle: v.string(),
+  type: v.string(),            // "comment" or "star"
+  isRead: v.boolean(),
+  createdAt: v.number(),
+}).index("by_recipient", ["recipientUserId"]),
+
+
   codeExecutions: defineTable({
     userId: v.string(),
     language: v.string(),
@@ -43,3 +56,5 @@ export default defineSchema({
     .index("by_snippet_id", ["snippetId"])
     .index("by_user_id_and_snippet_id", ["userId", "snippetId"]),
 });
+
+
