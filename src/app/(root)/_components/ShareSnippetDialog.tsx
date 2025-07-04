@@ -3,7 +3,7 @@ import { useMutation } from "convex/react";
 import React, { useState } from "react";
 import { api } from "../../../../convex/_generated/api";
 import { X } from "lucide-react";
-import toast from "react-hot-toast";
+import { toast } from "sonner"; 
 
 function ShareSnippetDialog({ onClose }: { onClose: () => void }) {
   const [title, setTitle] = useState("");
@@ -19,10 +19,10 @@ function ShareSnippetDialog({ onClose }: { onClose: () => void }) {
       await createSnippet({ title, code, language });
       onClose();
       setTitle("");
-      toast.success("Snippet shared successfully!");
+      toast.success("Snippet shared successfully!"); 
     } catch (error) {
       console.error("Error sharing snippet:", error);
-      toast.error("Login First To Share Snippet!");
+      toast.error("Login First To Share Snippet!"); 
     } finally {
       setIsSharing(false);
     }

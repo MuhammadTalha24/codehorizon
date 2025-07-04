@@ -78,7 +78,6 @@ export const getSnippets = query({
   },
 });
 
-// Mutation to star or unstar the snippet
 export const starSnippet = mutation({
   args: {
     snippetId: v.id("snippets"),
@@ -87,10 +86,16 @@ export const starSnippet = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not authenticated");
 
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_user_id")
+      .filter((q) => q.eq(q.field("userId"), identity.subject))
+      .first();
+    if (!user) throw new Error("User not found");
+
     const userId = identity.subject;
     const snippetId = args.snippetId;
 
-    // Check if THIS USER already starred this snippet
     const existingStar = await ctx.db
       .query("stars")
       .withIndex("by_user_id_and_snippet_id")
@@ -102,18 +107,31 @@ export const starSnippet = mutation({
       )
       .first();
 
+    const snippet = await ctx.db.get(snippetId);
+    if (!snippet) throw new Error("Snippet not found");
+
     if (existingStar) {
-      // If user already starred, then remove THEIR OWN star
       await ctx.db.delete(existingStar._id);
     } else {
-      // Otherwise, add a new star for THIS USER
-      await ctx.db.insert("stars", {
-        userId,
-        snippetId,
-      });
+      await ctx.db.insert("stars", { userId, snippetId });
+
+      // Notify snippet owner only if not starring own snippet
+      if (snippet.userId !== userId) {
+        await ctx.db.insert("notifications", {
+          recipientUserId: snippet.userId,
+          senderUserId: userId,
+          senderName: user.name,
+          snippetId,
+          snippetTitle: snippet.title,
+          type: "star",
+          isRead: false,
+          createdAt: Date.now(),
+        });
+      }
     }
   },
 });
+
 
 // Query to check if the snippet is starred by the current user
 export const isSnippetStarred = query({
@@ -176,6 +194,8 @@ export const getComments = query({
   },
 });
 
+
+
 export const addComment = mutation({
   args: {
     snippetId: v.id("snippets"),
@@ -193,14 +213,36 @@ export const addComment = mutation({
 
     if (!user) throw new Error("User not found");
 
-    return await ctx.db.insert("snippetComments", {
+    // Insert comment
+    await ctx.db.insert("snippetComments", {
       userId: identity.subject,
       userName: user.name,
       snippetId: args.snippetId,
       content: args.content,
     });
+
+    // Fetch snippet to notify owner
+    const snippet = await ctx.db.get(args.snippetId);
+    if (!snippet) throw new Error("Snippet not found");
+
+    // Avoid notifying self
+    if (snippet.userId !== identity.subject) {
+      await ctx.db.insert("notifications", {
+        recipientUserId: snippet.userId,
+        senderUserId: identity.subject,
+        senderName: user.name,
+        snippetId: args.snippetId,
+        snippetTitle: snippet.title,
+        type: "comment",
+        isRead: false,
+        createdAt: Date.now(),
+      });
+    }
   },
 });
+
+
+
 
 export const deleteComment = mutation({
   args: {
@@ -239,3 +281,5 @@ export const getStarredSnippets = query({
     return snippets.filter((snippet) => snippet !== null);
   },
 });
+
+
