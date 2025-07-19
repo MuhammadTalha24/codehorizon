@@ -50,5 +50,7 @@ SUGGESTIONS:
   } catch (error) {
     console.error('Suggestion API error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+
+    
   }
 }
