@@ -13,6 +13,8 @@
     "@monaco-editor/react": "^4.7.0",
     "convex": "^1.21.0",
     "framer-motion": "^12.7.3",
+    "lodash": "^4.17.21",
+    "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.488.0",
     "next": "15.2.4",
     "react": "^19.0.0",
