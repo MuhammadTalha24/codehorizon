@@ -32,7 +32,7 @@ export default function NotificationBell() {
 
 
   return (
-    <div className="relative">
+    <div className="relative mt-2">
       <button
         onClick={() => setOpen(!open)}
         className="relative text-white hover:text-blue-400 cursor-pointer"

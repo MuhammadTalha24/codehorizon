@@ -13,10 +13,10 @@ function Footer() {
           </div>
           <div className="flex items-center gap-6">
             <Link
-              href="/support"
+              href="/about"
               className="text-gray-400 hover:text-gray-300 transition-colors"
             >
-              Support
+              About
             </Link>
             <Link
               href="/privacy"
