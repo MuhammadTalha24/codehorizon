@@ -4,19 +4,19 @@ export async function POST(req: Request) {
   try {
     const { cursorText, language } = await req.json();
 
-    const prompt = `
-You are a code completion engine. Given the following ${language} code written so far, continue it from the current position with 5 short and relevant code completions. Do not repeat any part of the existing code. Just provide raw code suggestions only — no numbering, no formatting, no markdown, and no explanations.
+    // Updated prompt to focus on code completion at the cursor
+    const prompt = `You are a code completion engine. Given the following ${language} code up to the cursor position, provide 5 concise code completions that continue from the cursor. Return only the raw code completions, one per line, without numbering, backticks, or markdown formatting. Do not repeat the input code or include the code before the cursor in the suggestions.
 
-CODE BEFORE CURSOR:
+Code:
 ${cursorText}
 
-SUGGESTIONS:
-`;
+Completions:`;
 
     const apiRes = await fetch('https://modelslab.com/api/uncensored-chat/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': 'Bearer dzNt0JlHxJOAPSZzrKmkLuzM4S4rp0L7SpDTRekneicxV3UdKZREWqm6Tbx1',
+        'Authorization': 'Bearer dzNt0JlHxJOAPSZzrKmkLuzM4S4rp0L7SpDTRekneicxV3UdKZREWqm6Tbx1', // Use environment variable
+        
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -24,12 +24,9 @@ SUGGESTIONS:
         messages: [
           {
             role: 'system',
-            content: 'You are a strict code completion engine. Reply with only raw code lines. No markdown, no numbering.',
+            content: 'You are a strict code completion engine. Always reply with raw code suggestions only, one per line, without numbering, backticks, or markdown formatting.',
           },
-          {
-            role: 'user',
-            content: prompt,
-          },
+          { role: 'user', content: prompt },
         ],
         temperature: 0.4,
       }),
@@ -38,19 +35,23 @@ SUGGESTIONS:
     const json = await apiRes.json();
     const content = json?.choices?.[0]?.message?.content || '';
 
+    // Clean suggestions: Remove numbering, backticks, and extra whitespace
     const suggestions = content
       .split('\n')
       .map(line => line.trim())
-      .filter(line => line && !line.startsWith('```') && !line.startsWith('//'))
+      .filter(line => line && !line.startsWith('```')) // Remove markdown code block delimiters
       .map(line =>
-        line.replace(/^\d+\.\s*/, '').replace(/`/g, '').trim()
-      );
+        line
+          .replace(/^\d+\.\s*/g, '') // Remove "1.", "2.", etc.
+          .replace(/```/g, '') // Remove any remaining backticks
+          .replace(/^`|`$/g, '') // Remove single backticks at start/end
+          .trim() // Remove extra whitespace
+      )
+      .filter(line => line); // Remove empty lines
 
     return NextResponse.json({ suggestions });
   } catch (error) {
-    console.error('Suggestion API error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-
-    
+    console.error('API error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
